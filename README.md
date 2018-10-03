@@ -19,7 +19,7 @@ Note that:
 
 HOW TO USE:
 1. Copy the file pie_sender.sh to the retropie from where you want to send the entire content.
-Preferably in a folder, for example a / home / pi / scripts /
+Preferably in a folder, for example in /home/pi/scripts
 
 2. Gives write permissions to the file: "chmod + x pie_sender.sh".
 
