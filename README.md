@@ -15,6 +15,7 @@ Note that:
  - Roms, saves, savestates, artworks, and gamelists was overwritten in target.
  - You must know the IP address of the target.
  - You must know the user:password of the target (default: pi:retropie).
+ - In each synchronized directory the target password will be requested. You can avoid this, creating a key system for both retropie.
  - Remember to reboot the target when PieSender finishes.
 
 HOW TO USE:
