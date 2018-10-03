@@ -1,0 +1,3 @@
+0.7
+- Improve the IP validation system.
+- Repair knowm bug: A "directory not found" error appears on each synchronization. It does not affect but is annoying.
