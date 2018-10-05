@@ -1,3 +1,13 @@
+0.7.1
+NEWS
+- Fixed rsync "directory not found" bug.
+-TODO file now is VERSIONS_LOG.
+
+TO DO
+- Improve the IP validation system.
+
+
 0.7
+TO DO
 - Improve the IP validation system.
 - Repair knowm bug: A "directory not found" error appears on each synchronization. It does not affect but is annoying.

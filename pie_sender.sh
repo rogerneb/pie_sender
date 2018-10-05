@@ -5,8 +5,8 @@ function welcome(){
 	clear
 	echo ""
 	echo "################################################"
-	echo "#             Welcome to PieSender             #"
-	echo "######################################### v0.7 #"
+	echo "#            Welcome to pie_sender             #"
+	echo "####################################### v0.7.1 #"
 	echo ""
 
 	echo "Want to see instrucctions? [Y/N]"
@@ -15,7 +15,7 @@ function welcome(){
 
 	#instructions
 	if [[ $instructions == "y" || $instructions == "Y" ]]; then
-		echo "PieSender will copy the roms, saves and statuses from local retropie to another target retropie.
+		echo "pie_sender will copy the roms, saves and statuses from local retropie to another target retropie.
 
 Uses a SSH connection and rsync.
 
@@ -32,7 +32,9 @@ Uses a SSH connection and rsync.
  - In each synchronized directory the target password will be requested. You can avoid this, creating a key system for both retropie.
  - Remember to reboot the target when PieSender finishes.
 
- This script comes with no guarantee.
+ This script comes with no warranty. GNU GPL v3.0
+
+ Roger Nebot.
 "
 		echo "- Press enter to continue -"
 		read key
@@ -90,57 +92,45 @@ function lets_go() {
 		#ROMS
 		echo -e "\e[35mSynchronizing the roms.\e[0m\n"
 		sleep 1
-		rsync -avzr ~/RetroPie/roms/ ssh $user@$target:~/RetroPie/roms/
+		rsync -avzr ~/RetroPie/roms/ $user@$target:~/RetroPie/roms/
 		echo ""
 		#BIOS
 		echo -e "\e[35mSynchronizing the systems bios.\e[0m\n"
 		sleep 1
-		rsync -avzr ~/RetroPie/BIOS/ ssh $user@$target:~/RetroPie/BIOS/
+		rsync -avzr ~/RetroPie/BIOS/ $user@$target:~/RetroPie/BIOS/
 		echo ""
 		#DOWNLOADED IMAGES
 		echo -e "\e[35mSynchronizing the cover artworks.\e[0m\n"
 		sleep 1
-		rsync -avzr ~/.emulationstation/downloaded_images/ ssh $user@$target:~/.emulationstation/downloaded_images/
+		rsync -avzr ~/.emulationstation/downloaded_images/ $user@$target:~/.emulationstation/downloaded_images/
 		echo ""
 		#SYSTEMS GAMELISTS
 		echo -e "\e[35mSynchronizing the Gamelists.\e[0m\n"
 		sleep 1
-		rsync -avzr ~/.emulationstation/gamelists/ ssh $user@$target:~/.emulationstation/gamelists/
+		rsync -avzr ~/.emulationstation/gamelists/ $user@$target:~/.emulationstation/gamelists/
 		echo ""
-
-		#SYSTEMS LIST NOT WORKING. PERMISION FAIL.
-		#echo -e "\e[35mSynchronizing the Systemslist.\e[0m\n"
-		#sleep 1
-		#rsync -avzr /etc/emulationstation ssh $user@$target:/etc/emulationstation
-
 
 		#PURGE
 		#ROMS
 		echo -e "\e[35mPurging the roms.\e[0m\n"
 		sleep 1
-		rsync -avh ~/RetroPie/roms/ ssh $user@$target:~/RetroPie/roms/ --delete
+		rsync -avh ~/RetroPie/roms/ $user@$target:~/RetroPie/roms/ --delete
 		echo ""
 		#BIOS
 		echo -e "\e[35mPurging the system bios.\e[0m\n"
 		sleep 1
-		rsync -avh ~/RetroPie/BIOS/ ssh $user@$target:~/RetroPie/BIOS/ --delete
+		rsync -avh ~/RetroPie/BIOS/ $user@$target:~/RetroPie/BIOS/ --delete
 		echo ""
 		#DOWNLOADED IMAGES
 		echo -e "\e[35mPurging the cover artworks.\e[0m\n"
 		sleep 1
-		rsync -avh ~/.emulationstation/downloaded_images/ ssh $user@$target:~/.emulationstation/downloaded_images/ --delete
+		rsync -avh ~/.emulationstation/downloaded_images/ $user@$target:~/.emulationstation/downloaded_images/ --delete
 		echo ""
 		#SYSTEMS GAMELISTS
 		echo -e "\e[35mPurging the Gamelists.\e[0m\n"
 		sleep 1
-		rsync -avh ~/.emulationstation/gamelists/ ssh $user@$target:~/.emulationstation/gamelists/ --delete
+		rsync -avh ~/.emulationstation/gamelists/ $user@$target:~/.emulationstation/gamelists/ --delete
 		echo ""
-
-		#SYSTEMS LIST NOT WORKING. PERMISION FAIL.
-		#echo -e "\e[35mPurging the Systemslist.\e[0m\n"
-		#sleep 1
-		#rsync -avh /etc/emulationstation ssh $user@$target:/etc/emulationstation --delete
-		#echo ""
 
 		the_end
 	fi
