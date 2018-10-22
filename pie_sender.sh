@@ -129,7 +129,7 @@ function lets_go() {
 			echo ""
 		fi
 
-		#DOWNLOADED IMAGES
+		#DOWNLOADED IMAGES  (Only in Complete mode)
 		if [[ $mode == 2 ]]; then
 			echo -e "\e[35mSynchronizing the cover artworks.\e[0m\n"
 			sleep 1
@@ -137,7 +137,7 @@ function lets_go() {
 			echo ""
 		fi
 
-		#SYSTEMS GAMELISTS
+		#SYSTEMS GAMELISTS  (Only in Complete mode)
 		if [[ $mode == 2 ]]; then
 			echo -e "\e[35mSynchronizing the Gamelists.\e[0m\n"
 			sleep 1
@@ -152,7 +152,7 @@ function lets_go() {
 		rsync -avh ~/RetroPie/roms/ $user@$target:~/RetroPie/roms/ --delete
 		echo ""
 
-		#BIOS
+		#BIOS  (Only in Complete mode)
 		if [[ $mode == 2 ]]; then
 			echo -e "\e[35mPurging the system bios.\e[0m\n"
 			sleep 1
@@ -160,7 +160,7 @@ function lets_go() {
 			echo ""
 		fi
 
-		#DOWNLOADED IMAGES
+		#DOWNLOADED IMAGES  (Only in Complete mode)
 		if [[ $mode == 2 ]]; then
 			echo -e "\e[35mPurging the cover artworks.\e[0m\n"
 			sleep 1
@@ -168,14 +168,13 @@ function lets_go() {
 			echo ""
 		fi
 
-		#SYSTEMS GAMELISTS
+		#SYSTEMS GAMELISTS  (Only in Complete mode)
 		if [[ $mode == 2 ]]; then
 			echo -e "\e[35mPurging the Gamelists.\e[0m\n"
 			sleep 1
 			rsync -avh ~/.emulationstation/gamelists/ $user@$target:~/.emulationstation/gamelists/ --delete
 			echo ""
 		fi
-
 		the_end
 	fi
 
