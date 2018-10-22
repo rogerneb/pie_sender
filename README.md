@@ -18,6 +18,11 @@ Note that:
  - In each synchronized directory the target password will be requested. You can avoid this, creating a key system for both retropie.
  - Remember to reboot the target when PieSender finishes.
 
+pie_sender can work in two modes:
+1. Basic: Only roms and saves will be synchronized
+ 
+2. Complete: roms, saves, bios artworks and gamelists will be synchronized.
+
 HOW TO USE:
 1. Copy the file pie_sender.sh to the retropie from where you want to send the entire content.
 Preferably in a folder, for example in /home/pi/scripts

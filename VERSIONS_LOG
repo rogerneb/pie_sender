@@ -1,7 +1,15 @@
+0.9
+NEWS
+- Added two modes. Basic or complete syncro.
+
+TO DO
+- Improve the IP validation system.
+
+
 0.7.1
 NEWS
 - Fixed rsync "directory not found" bug.
--TODO file now is VERSIONS_LOG.
+- TODO file now is VERSIONS_LOG.
 
 TO DO
 - Improve the IP validation system.

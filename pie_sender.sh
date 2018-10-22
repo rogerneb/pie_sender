@@ -6,7 +6,7 @@ function welcome(){
 	echo ""
 	echo "################################################"
 	echo "#            Welcome to pie_sender             #"
-	echo "####################################### v0.7.1 #"
+	echo "####################################### v0.9 ###"
 	echo ""
 
 	echo "Want to see instrucctions? [Y/N]"
@@ -19,7 +19,7 @@ function welcome(){
 
 Uses a SSH connection and rsync.
 
- PieSender will synchronize:
+ pie_sender will synchronize:
   - Roms.
   - Bios.
   - Game files  and savestates.
@@ -32,6 +32,10 @@ Uses a SSH connection and rsync.
  - In each synchronized directory the target password will be requested. You can avoid this, creating a key system for both retropie.
  - Remember to reboot the target when PieSender finishes.
 
+ pie_sender can work in two modes:
+ 1. Basic: Only roms and saves.
+ 2. Complete: roms, saves, bios artworks and gamelists.
+
  This script comes with no warranty. GNU GPL v3.0
 
  Roger Nebot.
@@ -41,6 +45,19 @@ Uses a SSH connection and rsync.
 	fi
 }
 ### END WELCOME ###
+
+### GET THE MODE ###
+function get_mode() {
+	mode="x"
+	while [[ $mode != 1 && $mode != 2 ]]; do
+		echo "Choose a mode [1/2]:"
+		echo " 1. Basic: Only roms and saves."
+		echo " 2. Complete: roms, saves, bios artworks and gamelists."
+		echo -n "> "; read mode
+		echo ""
+	done
+}
+### END GET THE MODE ###
 
 ### GET THE TARGET ###
 function get_target(){
@@ -88,27 +105,45 @@ function lets_go() {
 	if [[ $sure != "y" && $sure != "Y" ]]; then
 		aborting
 	else
+		#Mode advice
+		if [[ $mode == 1 ]]; then
+			echo "Working in basic mode."
+			echo ""
+		else
+			echo "Working in complete mode."
+			echo ""
+		fi
+
 		#SYNC
 		#ROMS
 		echo -e "\e[35mSynchronizing the roms.\e[0m\n"
 		sleep 1
 		rsync -avzr ~/RetroPie/roms/ $user@$target:~/RetroPie/roms/
 		echo ""
-		#BIOS
-		echo -e "\e[35mSynchronizing the systems bios.\e[0m\n"
-		sleep 1
-		rsync -avzr ~/RetroPie/BIOS/ $user@$target:~/RetroPie/BIOS/
-		echo ""
+
+		#BIOS (Only in Complete mode)
+		if [[ $mode == 2 ]]; then
+			echo -e "\e[35mSynchronizing the systems bios.\e[0m\n"
+			sleep 1
+			rsync -avzr ~/RetroPie/BIOS/ $user@$target:~/RetroPie/BIOS/
+			echo ""
+		fi
+
 		#DOWNLOADED IMAGES
-		echo -e "\e[35mSynchronizing the cover artworks.\e[0m\n"
-		sleep 1
-		rsync -avzr ~/.emulationstation/downloaded_images/ $user@$target:~/.emulationstation/downloaded_images/
-		echo ""
+		if [[ $mode == 2 ]]; then
+			echo -e "\e[35mSynchronizing the cover artworks.\e[0m\n"
+			sleep 1
+			rsync -avzr ~/.emulationstation/downloaded_images/ $user@$target:~/.emulationstation/downloaded_images/
+			echo ""
+		fi
+
 		#SYSTEMS GAMELISTS
-		echo -e "\e[35mSynchronizing the Gamelists.\e[0m\n"
-		sleep 1
-		rsync -avzr ~/.emulationstation/gamelists/ $user@$target:~/.emulationstation/gamelists/
-		echo ""
+		if [[ $mode == 2 ]]; then
+			echo -e "\e[35mSynchronizing the Gamelists.\e[0m\n"
+			sleep 1
+			rsync -avzr ~/.emulationstation/gamelists/ $user@$target:~/.emulationstation/gamelists/
+			echo ""
+		fi
 
 		#PURGE
 		#ROMS
@@ -116,21 +151,30 @@ function lets_go() {
 		sleep 1
 		rsync -avh ~/RetroPie/roms/ $user@$target:~/RetroPie/roms/ --delete
 		echo ""
+
 		#BIOS
-		echo -e "\e[35mPurging the system bios.\e[0m\n"
-		sleep 1
-		rsync -avh ~/RetroPie/BIOS/ $user@$target:~/RetroPie/BIOS/ --delete
-		echo ""
+		if [[ $mode == 2 ]]; then
+			echo -e "\e[35mPurging the system bios.\e[0m\n"
+			sleep 1
+			rsync -avh ~/RetroPie/BIOS/ $user@$target:~/RetroPie/BIOS/ --delete
+			echo ""
+		fi
+
 		#DOWNLOADED IMAGES
-		echo -e "\e[35mPurging the cover artworks.\e[0m\n"
-		sleep 1
-		rsync -avh ~/.emulationstation/downloaded_images/ $user@$target:~/.emulationstation/downloaded_images/ --delete
-		echo ""
+		if [[ $mode == 2 ]]; then
+			echo -e "\e[35mPurging the cover artworks.\e[0m\n"
+			sleep 1
+			rsync -avh ~/.emulationstation/downloaded_images/ $user@$target:~/.emulationstation/downloaded_images/ --delete
+			echo ""
+		fi
+
 		#SYSTEMS GAMELISTS
-		echo -e "\e[35mPurging the Gamelists.\e[0m\n"
-		sleep 1
-		rsync -avh ~/.emulationstation/gamelists/ $user@$target:~/.emulationstation/gamelists/ --delete
-		echo ""
+		if [[ $mode == 2 ]]; then
+			echo -e "\e[35mPurging the Gamelists.\e[0m\n"
+			sleep 1
+			rsync -avh ~/.emulationstation/gamelists/ $user@$target:~/.emulationstation/gamelists/ --delete
+			echo ""
+		fi
 
 		the_end
 	fi
@@ -156,5 +200,6 @@ function the_end (){
 
 ### MAIN ###
 welcome
+get_mode
 get_target
 ### END MAIN ###
