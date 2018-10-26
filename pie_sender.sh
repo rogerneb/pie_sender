@@ -6,7 +6,7 @@ function welcome(){
 	echo ""
 	echo "################################################"
 	echo "#            Welcome to pie_sender             #"
-	echo "####################################### v0.9 ###"
+	echo "####################################### v1.0 ###"
 	echo ""
 
 	echo "Want to see instrucctions? [Y/N]"
@@ -46,6 +46,56 @@ Uses a SSH connection and rsync.
 }
 ### END WELCOME ###
 
+### CHECK SYSTEM ###
+function check_system(){
+	systemok=true
+	echo "Checking the system directories..."
+	echo ""
+
+	#check roms
+	if [ ! -d ~/RetroPie/roms ]; then
+    echo -e "\e[31mRoms not found.\e[0m\n"
+		systemok=false
+	else
+		echo -e "\e[92mRoms found.\e[0m\n"
+	fi
+	sleep 1
+	#check Bios
+	if [ ! -d ~/RetroPie/BIOS/ ]; then
+    echo -e "\e[31mBIOS not found.\e[0m\n"
+		systemok=false
+	else
+		echo -e "\e[92mBIOS found.\e[0m\n"
+	fi
+	sleep 1
+
+	#check images
+	if [ ! -d ~/.emulationstation/downloaded_images/ ]; then
+    echo -e "\e[31mImages not found.\e[0m\n"
+		systemok=false
+	else
+		echo -e "\e[92mImages found.\e[0m\n"
+	fi
+	sleep 1
+	#check gamelists
+	if [ ! -d ~/.emulationstation/gamelists/ ]; then
+    echo -e "\e[31mGamelists not found.\e[0m\n"
+		systemok=false
+	else
+		echo -e "\e[92mGamelists found.\e[0m\n"
+	fi
+	sleep 1
+
+	if [ $systemok == false ]; then
+		echo "Sorry, but some of the directories needed to work do not seem to be present. It may be that you are using a system that is not retropie, or that it is corrupt. The script can not continue."
+		aborting
+	else
+		echo "System checked."
+		echo ""
+	fi
+}
+### END CHECK SYSTEM ###
+
 ### GET THE MODE ###
 function get_mode() {
 	mode="x"
@@ -67,24 +117,30 @@ while [[ $key == "y" || $key == "Y" ]]; do
 	echo -n "> "; read target
 	echo ""
 
-	ping -c 1 $target>/dev/null #ping the target
-
-	if [[ $? -eq 0 ]]; then #ping responses ok. Accessible. Let's go
-		echo -e "\e[92m"$target" seems available.\e[0m"
-		sleep 2
-		key=0
-		lets_go
-	else #the target is not correct. Repeat if user wants.
-	  echo -e "\e[31m"$target" seems not available.\e[0m\n"
-		echo "Make sure that the target is powered on and the IP is correct."
-		echo ""
-		sleep 2
-		echo "Try another IP? [Y/N]"
-		echo -n "> "; read key
-		echo ""
-		if [[ $key != "y" && $key != "Y" ]]; then
-			aborting
+	#check the IP
+	if [[ $target =~ ^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+$ ]]; then #the ip is in correct format
+		ping -c 1 $target>/dev/null #ping the target
+		if [[ $? -eq 0 ]]; then #ping responses ok. Accessible. Let's go
+			echo -e "\e[92m"$target" seems available.\e[0m"
+			sleep 2
+			key=0
+			lets_go
+		else #the target is not correct. Repeat if user wants.
+		  echo -e "\e[31m"$target" seems not available.\e[0m\n"
+			echo "Make sure that the target is powered on and the IP is correct."
+			echo ""
+			sleep 2
+			echo "Try another IP? [Y/N]"
+			echo -n "> "; read key
+			echo ""
+			if [[ $key != "y" && $key != "Y" ]]; then
+				aborting
+			fi
 		fi
+	else #incorrect ip format
+	  echo "It does not look like a correct ip."
+		echo ""
+		sleep 1
 	fi
 done
 }
@@ -185,12 +241,13 @@ function lets_go() {
 function aborting (){
 	echo "Aborted."
 	echo ""
+	exit 1
 }
 ### END ABORTING ###
 
 ### THE END ###
 function the_end (){
-	echo "PieSender finishes. You must reboot the target retropie."
+	echo "pie_sender finishes. You must reboot the target retropie."
 	echo "See you ;-)"
 }
 
@@ -199,6 +256,7 @@ function the_end (){
 
 ### MAIN ###
 welcome
+check_system
 get_mode
 get_target
 ### END MAIN ###
